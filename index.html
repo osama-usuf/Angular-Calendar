@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html ng-app='NGCalendarApp'>
-  <head>
-    <meta charset="utf-8">
-    <script src="js/angular.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
-    <link rel="stylesheet" href="styles/styles.css">
-    <title>Angular Calendar</title>
-  </head>
-  <body>
-    <h1>A Simple Calendar Reservation System</h1>
+<head>
+	<meta charset="utf-8">
 
-    <div ng-controller='CalendarController as cal'>
-      <h3>List of Reservations</h3>
-      <ul>
-        <li ng-repeat="res in cal.reservations">
-			{{res}}
-        </li>
-      </ul>
-    </div>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.js"></script>
+	<script src="js/app.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+    <meta name="viewport" content="initial-scale=1"/>
+	<title>Angular Calendar</title>
+</head>
+<body>
+	<h1>A Simple Calendar Reservation System</h1>
 
-  </body>
+	<div ng-controller='CalendarController as cal'>
+
+<!-- 	      <h3>List of Reservations</h3>
+	<ul>
+	<li ng-repeat="res in cal.reservations">
+	Name: {{res.tennantName}}, Date: {{res.time * 1000 | date:'dd-MM-yyyy'}}
+	</li>
+	</ul> -->
+
+
+		<div> {{cal.curMonth}}  {{cal.curYear}}  </div>
+
+		<div layout="column">
+            <div class='day'>S</div>
+            <div class='day'>M</div>
+            <div class='day'>T</div>
+            <div class='day'>W</div>
+            <div class='day'>T</div>
+            <div class='day'>F</div>
+            <div class='day'>S</div>
+		</div>
+
+	</div>
+
+
+
+</body>
 </html>
