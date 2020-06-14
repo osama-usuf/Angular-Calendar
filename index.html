@@ -6,38 +6,48 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.js"></script>
-	<script src="js/app.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
-    <meta name="viewport" content="initial-scale=1"/>
+    <link rel="stylesheet" href="styles/styles.css">
+	<script src="js/app.js"></script>
 	<title>Angular Calendar</title>
 </head>
 <body>
-	<h1>A Simple Calendar Reservation System</h1>
 
 	<div ng-controller='CalendarController as cal'>
+	
+		<h1 layout layout-align="center center" class="md-display-2">A Simple Calendar Reservation System</h1>
 
-<!-- 	      <h3>List of Reservations</h3>
-	<ul>
-	<li ng-repeat="res in cal.reservations">
-	Name: {{res.tennantName}}, Date: {{res.time * 1000 | date:'dd-MM-yyyy'}}
-	</li>
-	</ul> -->
+<!-- 	  	<h3>List of Reservations</h3>
+		<ul>
+			<li ng-repeat="res in cal.reservations">
+			Name: {{res.tennantName}}, Date: {{res.time * 1000 | date:'dd-MM-yyyy'}}
+			</li>
+		</ul> -->
+
+ 		<md-whiteframe class="md-whiteframe-z1" layout layout-margin layout-padding layout-align="center center">
+			<div layout  > {{cal.curMonth}}  {{cal.curYear}}  </div>
+	 	</md-whiteframe>
 
 
-		<div> {{cal.curMonth}}  {{cal.curYear}}  </div>
-
-		<div layout="column">
-            <div class='day'>S</div>
-            <div class='day'>M</div>
-            <div class='day'>T</div>
-            <div class='day'>W</div>
-            <div class='day'>T</div>
-            <div class='day'>F</div>
-            <div class='day'>S</div>
+		<div layout flex="none" layout-wrap layout-margin layout-padding layout-align="center top" class="calendar">
+            	<div class='day' flex="none" ng-repeat="x in [].constructor(cal.totalDays) track by $index">{{cal.getDayName($index)}}</div>
 		</div>
 
+
+      <div class="md-actions" layout="row" layout-align="center center" layout-margin>
+	    <section layout="row" layout-sm="column" layout-align="center center">
+	      <md-button class="md-raised md-primary" ng-click="cal.showConfirm($event)">Add Tenant</md-button>
+	      <md-button ng-disabled="{{!cal.canRemove}}" class="md-raised md-primary">Remove Tenant</md-button>
+	    </section>
+      </div>
+      <br/>
+
+
+      	<b layout="row" layout-align="center center" layout-margin>
+    		{{cal.alert}}
+		</b>
 	</div>
 
 

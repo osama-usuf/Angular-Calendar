@@ -1,13 +1,26 @@
-body {
-  font-size: 1.2em;
-}
-#list1, #list2 {
-  float: left;
-}
-#list2 {
-  margin-left: 40px;
+button,
+select,
+html,
+textarea,
+input {
+  font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.day {
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+	outline: 2px solid purple;
 }
 
 .error {
   color: red;
+}
+
+.calendar {
+	outline: 2px solid green;
+}
+
+.md-whiteframe-z1 {
+	background-color: gray;
 }
