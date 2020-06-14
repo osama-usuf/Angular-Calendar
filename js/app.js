@@ -27,7 +27,7 @@ function CalendarController(ApiService, $mdDialog)
 	calendar.totalDays = 7;
 	// Helper functions for calendar functionality
 
-	calendar.days = getTotalDays(calendar.curMonth, calendar.curYear);
+	calendar.days = getTotalDays(curDate.getMonth(), calendar.curYear);
 
 	function getTotalDays(month, year)
 	{
@@ -36,7 +36,7 @@ function CalendarController(ApiService, $mdDialog)
 		// (month, year) -> (numDays, firstDay)
 		var firstDay = new Date(year, month, 1).toLocaleDateString('default', { weekday: 'long' });
 		var numDays = new Date(year, month, 0).getDate();
-		return [{'numDays': numDays, 'firstDay': firstDay}]
+		return {'numDays': numDays, 'firstDay': firstDay}
 	}
 
 	calendar.getDayName = function(day)
