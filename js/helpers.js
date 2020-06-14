@@ -62,31 +62,23 @@ function getViewDays(month, year)
 
 	// Initial Array padding
 	for (var i=0; i < initPadding; i++) {
-		daysArr.push({'value':totalDays_prevView- (initPadding-i) + 1,
-					  'disabled': true, 
-					  'reserved': false});
+		daysArr.push({'value':totalDays_prevView- (initPadding-i) + 1, 'disabled': true, 'reserved': false});
 	}
 	// Populate current month's days
 	for (var i=0; i < totalDays_curView; i++) {
-		daysArr.push({'value':totalDays_curView - (totalDays_curView - i) + 1,
-					  'disabled': false, 
-					  'reserved': false});
+		daysArr.push({'value':totalDays_curView - (totalDays_curView - i) + 1, 'disabled': false, 'reserved': false});
 	}
 	// Populate final array padding
 	var i = 1;
 	while (daysArr.length % 7 != 0) {
-		daysArr.push({'value':i++,
-					  'disabled': true, 
-					  'reserved': false});
+		daysArr.push({'value':i++, 'disabled': true, 'reserved': false});
 	}
 
 	// Appending day names for final presenting
 	var newArr = [];
 	var tempDays = [];
 	for (var i=0; i< 7; i++) {
-		tempDays.push({'value':getDayName(tempDays.length),
-				     'disabled': false,
-				      'isDay': 'primary'});
+		tempDays.push({'value':getDayName(tempDays.length), 'disabled': false, 'isDay': 'primary'});
 	}
 	newArr.push(tempDays);
 	while(daysArr.length) {

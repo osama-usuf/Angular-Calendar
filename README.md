@@ -22,6 +22,7 @@
 
 - A day can only be booked by a single tennant at a given time.
 - There were a few duplicate reservations in the file the backend is serving. For example, `"Marianna Gregory"` appears twice. This has been left as it was.
+- Chrome's console gives a passive event listener warning. It's a compatibility issue of modern browsers with AngularJS. Source: https://github.com/angular/angular.js/issues/15901
 
 # *Tested On
 - Chrome

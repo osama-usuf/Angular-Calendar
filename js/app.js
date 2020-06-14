@@ -2,7 +2,7 @@
 'use strict';
 
 angular
-.module('NGCalendarApp', ['ngMaterial'])
+.module('NGCalendarApp', ['ngMaterial'])			   // injecting ngMaterial as dependency
 .controller('CalendarController', CalendarController)  // main controller for the application
 .service('ApiService', ApiService)                     // main service, responsible for hitting the backend and fetching data via the API
 .constant('ApiBasePath', "http://localhost:3000");     // base API path, good to have this as a one-time constant
@@ -15,8 +15,6 @@ function CalendarController(ApiService, $mdDialog)
 	calendar.curDate = new Date();
 	calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
 	calendar.curYear = calendar.curDate.getFullYear();
-
-
 
 	calendar.refreshReservations = () => {
 		var [numDays, _] = getTotalDays(calendar.curDate.getMonth(), calendar.curYear);
