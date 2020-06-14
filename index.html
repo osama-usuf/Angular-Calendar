@@ -19,24 +19,14 @@
 	
 		<h1 layout layout-align="center center" class="md-display-2">A Simple Calendar Reservation System</h1>
 
-<!-- 	  	<h3>List of Reservations</h3>
-		<ul>
-			<li ng-repeat="res in cal.reservations">
-			Name: {{res.tennantName}}, Date: {{res.time * 1000 | date:'dd-MM-yyyy'}}
-			</li>
-		</ul> -->
-
  		<md-whiteframe class="md-whiteframe-z1" layout layout-margin layout-padding layout-align="center center">
-			<div layout  > {{cal.curMonth}}  {{cal.curYear}}  </div>
+			<div layout> {{cal.curMonth}}  {{cal.curYear}}  </div>
 	 	</md-whiteframe>
 
-
-		<div layout flex="none" layout-margin layout-padding layout-align="center top" class="calendar">
-            	<md-button class='day md-primary md-raised' layout="column" flex="none" ng-repeat="x in [].constructor(cal.totalDays) track by $index">{{cal.getDayName($index)}}</md-button>
-		</div>
-
-		<div layout flex="none" layout-wrap layout-margin layout-padding layout-align="center top" class="calendar">
-            	<md-button class='day md-raised' layout="column" flex="none" ng-repeat="x in [].constructor(cal.viewDays['numDays']) track by $index">{{$index+1}}</md-button>
+		<div layout flex="none" layout-margin layout-padding layout-align="left top" class="calendar">
+   			<div layout="column" ng-repeat="week in cal.viewDays">
+				<md-button class='day md-raised md-{{day["isDay"]}}' ng-disabled="{{day['disabled']}}" layout="column" flex="none" ng-repeat="day in week">{{day['value']}}</md-button>
+			</div>
 		</div>
 
       <div class="md-actions" layout="row" layout-align="center center" layout-margin>

@@ -20,7 +20,7 @@ function CalendarController(ApiService, $mdDialog)
 		console.log("Promise in CalendarController failed. Check if server is running correctly");
 	});
 
-	var curDate = new Date();
+	var curDate = new Date('2019-02-02');
 	calendar.curMonth = curDate.toLocaleDateString('default', { month: 'long' });
 	calendar.curYear = curDate.getFullYear();
 	calendar.canRemove = false; // disables the remove tenant button
@@ -29,7 +29,12 @@ function CalendarController(ApiService, $mdDialog)
 
 	calendar.viewDays = getViewDays(curDate.getMonth(), calendar.curYear);
 
-	//calendar.viewDays = getViewDays(2, 2020);
+	function getDayName(day)
+	{
+		// Useful for mapping integers in [0-6] to actual day names
+		var day = new Date(1, 1, day+3).toLocaleDateString('default', { weekday: 'long' });
+		return day.slice(0, 3);
+	}
 
 	function getTotalDays(month, year)
 	{
@@ -55,7 +60,6 @@ function CalendarController(ApiService, $mdDialog)
 		nextMonth = (nextMonth + 1) % 12;
 		prevMonth = (((prevMonth - 1) % 12) + 12) % 12;
 
-
 		var totalDays_prevView = getTotalDays(prevMonth, prevYear);
 		var totalDays_nextView = getTotalDays(nextMonth, nextYear);
 
@@ -67,30 +71,39 @@ function CalendarController(ApiService, $mdDialog)
 		var arrSize = initPadding + totalDays_curView['numDays'];
 		var daysArr = [];
 
-		for (var i=0; i < initPadding; i++)
-		{
+		// Initial Array padding
+		for (var i=0; i < initPadding; i++) {
 			daysArr.push({'value':totalDays_prevView['numDays']- (initPadding-i) + 1,
-						  'disabled': true});
+						  'disabled': true, 
+						  'reserved': false});
 		}
-		for (var i=0; i < totalDays_curView['numDays']; i++)
-		{
+		// Populate current month's days
+		for (var i=0; i < totalDays_curView['numDays']; i++) {
 			daysArr.push({'value':totalDays_curView['numDays'] - (totalDays_curView['numDays'] - i) + 1,
-						  'disabled': false});
+						  'disabled': false, 
+						  'reserved': false});
 		}
+		// Populate final array padding
 		var i = 1;
-		while (daysArr.length % 7 != 0)
-		{
+		while (daysArr.length % 7 != 0) {
 			daysArr.push({'value':i++,
-						  'disabled': true});
+						  'disabled': true, 
+						  'reserved': false});
 		}
-		console.log(daysArr);
-	}
 
-	calendar.getDayName = function(day)
-	{
-		// Useful for mapping integers in [0-6] to actual day names
-		var day = new Date(1, 1, day+3).toLocaleDateString('default', { weekday: 'long' });
-		return day.slice(0, 3);
+		// Appending day names for final presenting
+		var newArr = [];
+		var tempDays = [];
+		for (var i=0; i< 7; i++) {
+			tempDays.push({'value':getDayName(tempDays.length),
+					     'disabled': false,
+					      'isDay': 'primary'});
+		}
+		newArr.push(tempDays);
+		while(daysArr.length) {
+			newArr.push(daysArr.splice(0, 7));
+		}
+		return newArr;
 	}
 
   	calendar.showConfirm = function(ev) {
