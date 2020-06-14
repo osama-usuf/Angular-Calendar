@@ -32,11 +32,11 @@
 
 
 		<div layout flex="none" layout-margin layout-padding layout-align="center top" class="calendar">
-            	<div class='day' flex="none" ng-repeat="x in [].constructor(cal.totalDays) track by $index">{{cal.getDayName($index)}}</div>
+            	<md-button class='day md-primary md-raised' layout="column" flex="none" ng-repeat="x in [].constructor(cal.totalDays) track by $index">{{cal.getDayName($index)}}</md-button>
 		</div>
 
 		<div layout flex="none" layout-wrap layout-margin layout-padding layout-align="center top" class="calendar">
-            	<md-button class='day' flex="initial" ng-repeat="x in [].constructor(cal.days['numDays']) track by $index">{{$index+1}}</md-button>
+            	<md-button class='day md-raised' layout="column" flex="none" ng-repeat="x in [].constructor(cal.viewDays['numDays']) track by $index">{{$index+1}}</md-button>
 		</div>
 
       <div class="md-actions" layout="row" layout-align="center center" layout-margin>
