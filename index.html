@@ -20,25 +20,37 @@
 
 	<div ng-controller='CalendarController as cal'>
 	
-		<h1 layout="column" layout-align="center center" class="md-display-2">A Simple Calendar Reservation System</h1>
+		<h1 layout="column" layout-align="center center" class="md-display">A Simple Calendar Reservation System</h1>
 
  		<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
 			<b layout="row" layout-margin layout-align="center center"> 
-				<md-button class="md-primary md-raised chevron" flex="none" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
+				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
 				<div class="month">{{cal.curMonth | limitTo : 3 : 0}}</div>
-				<md-button class="md-primary md-raised chevron" flex="none" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
+				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
 			</b>
  			<b > {{cal.curYear}} </b>
 	 	</md-whiteframe>
 
-		<div layout flex="none" layout-margin layout-align="left top" class="calendar">
-   			<div layout="column" ng-repeat="week in cal.viewDays">
+		<div layout flex="none" layout-margin class="calendar">
+   			<div layout="column" flex="none" layout-align="left top" ng-repeat="week in cal.viewDays">
 				<md-button class='day md-raised md-{{day["isDay"]}}' ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week">{{day['value']}}</md-button>
 			</div>
+			<div layout="column" flex="none" layout-margin layout-padding layout-align="right down"> 
+					<h1  class="md-display-1" >Reservations for the Month</h1>
+
+			    <md-content>
+			      <md-list>
+			        <md-list-item class="md-3-line" ng-repeat="res in cal.reservations" ng-click="null" layout layout-wrap>
+			          <div class="md-list-item-text"  layout-wrap>
+			            <h3>{{ res['tennantName'] }}  </h3>
+			            <p>Date of Stay: {{ res['time'] * 1000 | date:'yyyy-MM-dd'  }} </p>
+			          </div>
+			        </md-list-item>
+			      </md-list>
+				</md-content>
+
+			</div>
 		</div>
-
-		<!-- {{cal.reservations}} -->
-
       <div class="md-actions" layout="row" layout-align="center center" layout-margin>
 	    <section layout="row" layout-sm="column" layout-align="center center">
 	      <md-button class="md-raised md-primary" ng-click="cal.showConfirm($event)">Add Tenant</md-button>

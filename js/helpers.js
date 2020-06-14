@@ -12,7 +12,7 @@ function getTotalDays(month, year)
 	// (month, year) -> (numDays, firstDay)
 	var firstDay = new Date(year, month, 1).getDay();
 	var numDays = 32 - new Date(year, month, 32).getDate();
-	return {'numDays': numDays, 'firstDay': firstDay}
+	return [numDays, firstDay]
 }
 
 function getNavMonthYear(key, month, year)
@@ -30,10 +30,15 @@ function getNavMonthYear(key, month, year)
 	return [navMonth, navYear]
 }
 
+function dateToUNIXTime(date)
+{
+	// Source: https://stackoverflow.com/questions/11893083/convert-normal-date-to-unix-timestamp
+	return (new Date(date).getTime() / 1000).toFixed(0);
+}
 
 function getViewDays(month, year)
 {
-	var totalDays_curView  = getTotalDays(month, year); 
+	var [totalDays_curView, firstDay_curView]  = getTotalDays(month, year); 
 	var nextMonth = month; var prevMonth = month;
 	var nextYear =   year; var prevYear  = year;
 
@@ -44,26 +49,26 @@ function getViewDays(month, year)
 	nextMonth = (nextMonth + 1) % 12;
 	prevMonth = (((prevMonth - 1) % 12) + 12) % 12;
 
-	var totalDays_prevView = getTotalDays(prevMonth, prevYear);
-	var totalDays_nextView = getTotalDays(nextMonth, nextYear);
+	var [totalDays_prevView, firstDay_prevView] = getTotalDays(prevMonth, prevYear);
+	var [totalDays_nextView, firstDay_nextView] = getTotalDays(nextMonth, nextYear);
 
 	// Figure out initial padding required
 
 	// Create the final view array
 
-	var initPadding = totalDays_curView['firstDay'];
-	var arrSize = initPadding + totalDays_curView['numDays'];
+	var initPadding = firstDay_curView;
+	var arrSize = initPadding + totalDays_curView;
 	var daysArr = [];
 
 	// Initial Array padding
 	for (var i=0; i < initPadding; i++) {
-		daysArr.push({'value':totalDays_prevView['numDays']- (initPadding-i) + 1,
+		daysArr.push({'value':totalDays_prevView- (initPadding-i) + 1,
 					  'disabled': true, 
 					  'reserved': false});
 	}
 	// Populate current month's days
-	for (var i=0; i < totalDays_curView['numDays']; i++) {
-		daysArr.push({'value':totalDays_curView['numDays'] - (totalDays_curView['numDays'] - i) + 1,
+	for (var i=0; i < totalDays_curView; i++) {
+		daysArr.push({'value':totalDays_curView - (totalDays_curView - i) + 1,
 					  'disabled': false, 
 					  'reserved': false});
 	}
