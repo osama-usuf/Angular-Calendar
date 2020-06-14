@@ -9,6 +9,8 @@ input {
 	width: 60px;
 	height: 60px;
 	text-align: center;
+	min-width: unset!important;
+
 }
 
 .error {
@@ -16,9 +18,19 @@ input {
 }
 
 .calendar {
-	outline: 2px solid green;
+	/*outline: 2px solid green;*/
 }
 
 .md-whiteframe-z1 {
-	background-color: gray;
+	background-color: white;
+}
+
+.chevron {
+	width: 25px!important;
+	min-width: unset!important;
+
+}
+
+.month {
+	width: 30px;
 }

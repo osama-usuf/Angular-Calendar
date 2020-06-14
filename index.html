@@ -22,11 +22,16 @@
 	
 		<h1 layout="column" layout-align="center center" class="md-display-2">A Simple Calendar Reservation System</h1>
 
- 		<md-whiteframe class="md-whiteframe-z1" layout layout-margin layout-padding layout-align="center center">
-			<div layout> {{cal.curMonth}}  {{cal.curYear}}  </div>
+ 		<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
+			<b layout="row" layout-margin layout-align="center center"> 
+				<md-button class="md-primary md-raised chevron" flex="none" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
+				<div class="month">{{cal.curMonth | limitTo : 3 : 0}}</div>
+				<md-button class="md-primary md-raised chevron" flex="none" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
+			</b>
+ 			<b > {{cal.curYear}} </b>
 	 	</md-whiteframe>
 
-		<div layout flex="none" layout-margin layout-padding layout-align="left top" class="calendar">
+		<div layout flex="none" layout-margin layout-align="left top" class="calendar">
    			<div layout="column" ng-repeat="week in cal.viewDays">
 				<md-button class='day md-raised md-{{day["isDay"]}}' ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week">{{day['value']}}</md-button>
 			</div>

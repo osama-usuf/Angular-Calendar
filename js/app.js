@@ -19,14 +19,23 @@ function CalendarController(ApiService, $mdDialog)
 		console.log("Promise in CalendarController failed. Check if server is running correctly");
 	});
 
-	var curDate = new Date();
-	calendar.curMonth = curDate.toLocaleDateString('default', { month: 'long' });
-	calendar.curYear = curDate.getFullYear();
+	calendar.curDate = new Date();
+	calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
+	calendar.curYear = calendar.curDate.getFullYear();
 	calendar.canRemove = false; // disables the remove tenant button
-	calendar.totalDays = 7;
-	// Helper functions for calendar functionality
 
-	calendar.viewDays = getViewDays(curDate.getMonth(), calendar.curYear);
+	calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear);
+
+	calendar.test = null;
+
+	calendar.navMonth = (key) => {
+		// Method for updating the calendar view, is fired when nav buttons are clicked
+		var [month, year] = getNavMonthYear(key, calendar.curDate.getMonth(), calendar.curYear)
+		calendar.curMonth = new Date(year, month, 1).toLocaleDateString('default', { month: 'long' });;
+		calendar.curYear = year;
+		calendar.curDate.setFullYear(year, month);
+		calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear);
+	}
 
   	calendar.showConfirm = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app

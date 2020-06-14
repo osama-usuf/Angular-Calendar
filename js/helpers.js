@@ -15,6 +15,21 @@ function getTotalDays(month, year)
 	return {'numDays': numDays, 'firstDay': firstDay}
 }
 
+function getNavMonthYear(key, month, year)
+{
+	if (key != 1 && key != -1) return [month, year]
+
+	var navMonth = month; 
+	var navYear =   year;
+
+	if (key == 1) navMonth = (navMonth + key) % 12;	
+	else navMonth = (((navMonth - 1) % 12) + 12) % 12;
+	
+	if 	( (month ==  0 && key == -1) || (month == 11 && key == 1)) 	{ navYear += key; }
+
+	return [navMonth, navYear]
+}
+
 
 function getViewDays(month, year)
 {
