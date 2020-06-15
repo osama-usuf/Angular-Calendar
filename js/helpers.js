@@ -36,44 +36,8 @@ function dateToUNIXTime(date)
 	return (new Date(date).getTime() / 1000).toFixed(0);
 }
 
-function getViewDays(month, year)
+function listToMatrix(daysArr) 
 {
-	var [totalDays_curView, firstDay_curView]  = getTotalDays(month, year); 
-	var nextMonth = month; var prevMonth = month;
-	var nextYear =   year; var prevYear  = year;
-
- 	// Edge cases for next/prev years 
-	if 		(month ==  0) 	{ prevYear -= 1; }
-	else if (month == 11)	{ nextYear += 1; }
-
-	nextMonth = (nextMonth + 1) % 12;
-	prevMonth = (((prevMonth - 1) % 12) + 12) % 12;
-
-	var [totalDays_prevView, firstDay_prevView] = getTotalDays(prevMonth, prevYear);
-	var [totalDays_nextView, firstDay_nextView] = getTotalDays(nextMonth, nextYear);
-
-	// Figure out initial padding required
-
-	// Create the final view array
-
-	var initPadding = firstDay_curView;
-	var arrSize = initPadding + totalDays_curView;
-	var daysArr = [];
-
-	// Initial Array padding
-	for (var i=0; i < initPadding; i++) {
-		daysArr.push({'value':totalDays_prevView- (initPadding-i) + 1, 'disabled': true, 'reserved': false});
-	}
-	// Populate current month's days
-	for (var i=0; i < totalDays_curView; i++) {
-		daysArr.push({'value':totalDays_curView - (totalDays_curView - i) + 1, 'disabled': false, 'reserved': false});
-	}
-	// Populate final array padding
-	var i = 1;
-	while (daysArr.length % 7 != 0) {
-		daysArr.push({'value':i++, 'disabled': true, 'reserved': false});
-	}
-
 	// Appending day names for final presenting
 	var newArr = [];
 	var tempDays = [];
@@ -85,4 +49,36 @@ function getViewDays(month, year)
 		newArr.push(daysArr.splice(0, 7));
 	}
 	return newArr;
+}
+
+function getViewDays(month, year, date, value = 1)
+{
+	date.setDate(value);
+	var accent = "no-accent";
+	var [nextMonth, nextYear] = getNavMonthYear(1, month, year);
+	var [prevMonth, prevYear] = getNavMonthYear(-1, month, year);
+	var [totalDays_curView, firstDay_curView]  = getTotalDays(month, year); 
+	var [totalDays_prevView, firstDay_prevView] = getTotalDays(prevMonth, prevYear);
+	var [totalDays_nextView, firstDay_nextView] = getTotalDays(nextMonth, nextYear);
+
+	// Figure out initial padding required
+	var initPadding = firstDay_curView;
+	var arrSize = initPadding + totalDays_curView;
+	var daysArr = [];
+
+	// Initial Array padding
+	for (var i=0; i < initPadding; i++) {
+		daysArr.push({'value':totalDays_prevView - (initPadding-i) + 1, 'disabled': true, 'reserved': false});
+	}
+	// Populate current month's days
+	for (var i=0; i < totalDays_curView; i++) {
+		if (i == value - 1) accent = "accent"; else accent = "no-accent";
+		daysArr.push({'value':totalDays_curView - (totalDays_curView-i) + 1, 'disabled': false, 'reserved': false, 'selected': accent});
+	}
+	// Populate final array padding
+	var i = 1;
+	while (daysArr.length % 7 != 0) {
+		daysArr.push({'value':i++, 'disabled': true, 'reserved': false});
+	}
+	return listToMatrix(daysArr);
 }

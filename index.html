@@ -31,9 +31,9 @@
  			<b > {{cal.curYear}} </b>
 	 	</md-whiteframe>
 
-		<div layout flex="none" layout-margin class="calendar">
+		<div layout flex="none" layout-padding class="calendar">
    			<div layout="column" flex="none" layout-align="left top" ng-repeat="week in cal.viewDays">
-				<md-button class='day md-raised md-{{day["isDay"]}}' ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week">{{day['value']}}</md-button>
+				<md-button class='day md-raised md-{{day["isDay"]}} md-{{day["selected"]}}'  ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week" ng-click="cal.dayClicked(day)">{{day['value']}}</md-button>
 			</div>
 			<div layout="column" flex="none" layout-margin layout-padding layout-align="right down"> 
 					<h1  class="md-display-1" >Reservations for the Month</h1>
@@ -56,6 +56,7 @@
 	      <md-button class="md-raised md-primary" ng-click="cal.showConfirm($event)">Add Tenant</md-button>
 	      <md-button ng-disabled="{{!cal.canRemove}}" class="md-raised md-primary">Remove Tenant</md-button>
 	    </section>
+	    {{cal.curDate | date:'yyyy-MM-dd'}}
       </div>
       <br/>
 

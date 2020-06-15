@@ -12,10 +12,7 @@ function CalendarController(ApiService, $mdDialog)
 {
 	var calendar = this;
 
-	calendar.curDate = new Date();
-	calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
-	calendar.curYear = calendar.curDate.getFullYear();
-
+	// Methods
 	calendar.refreshReservations = () => {
 		var [numDays, _] = getTotalDays(calendar.curDate.getMonth(), calendar.curYear);
 		var firstDay = new Date(calendar.curYear, calendar.curDate.getMonth(), 1);
@@ -29,12 +26,6 @@ function CalendarController(ApiService, $mdDialog)
 		});
 	}
 
-	calendar.refreshReservations();
-
-	calendar.canRemove = false; // disables the remove tenant button
-
-	calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear);
-
 
 	calendar.navMonth = (key) => {
 		// Method for updating the calendar view, is fired when nav buttons are clicked
@@ -42,12 +33,13 @@ function CalendarController(ApiService, $mdDialog)
 		calendar.curMonth = new Date(year, month, 1).toLocaleDateString('default', { month: 'long' });;
 		calendar.curYear = year;
 		calendar.curDate.setFullYear(year, month);
-		calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear);
+		calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear, calendar.curDate);
 
 		var [numDays, _] = getTotalDays(calendar.curDate.getMonth(), calendar.curYear);
 		calendar.firstDay = new Date(calendar.curYear, calendar.curDate.getMonth(), 1);
 		calendar.lastDay = new Date(calendar.curYear, calendar.curDate.getMonth(), numDays);
 
+		calendar.curDate.setDate(1);
 		calendar.refreshReservations();
 	}
 
@@ -65,6 +57,22 @@ function CalendarController(ApiService, $mdDialog)
 	    }, function() {
 	      calendar.alert = 'The tenant has not been added.';
 	    }); 
-  };
+  }
+
+  	calendar.dayClicked = (key) => {
+  		if (key['isDay'] != "primary")
+  		{
+  			calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear, calendar.curDate, key['value']);
+  		}
+	}
+
+	// Controller Scope variables - used in the view directly for laying out the page
+	calendar.curDate = new Date();
+	calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
+	calendar.curYear = calendar.curDate.getFullYear();
+
+	calendar.refreshReservations();
+	calendar.canRemove = false; // disables the remove tenant button
+	calendar.navMonth();
 }
 })();
