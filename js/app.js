@@ -21,7 +21,7 @@ function CalendarController(ApiService, $mdDialog, $filter)
 		resPromise.then( (response) => {
 			var res = response.data["reserved"];
 			for (var i=0; i< res.length; i++) {
-				res[i]["time2"] = $filter('date')(res[i]["time"] * 1000, 'dd-MM-yyyy hh:MM:ss Z', 'UTC');
+				res[i]["friendlyTime"] = $filter('date')(res[i]["time"] * 1000, 'dd-MM-yyyy', 'UTC');
 			}
 			calendar.reservations = res;
 		})
@@ -34,15 +34,10 @@ function CalendarController(ApiService, $mdDialog, $filter)
 	calendar.getServerTime = () => {
 		var resPromise = ApiService.getServerTime();
 		resPromise.then( (response) => {
-
-			console.log(response.data);
 			var date = new Date(response.data["time"] * 1000);
 
 			calendar.curDate = new Date(date);
 
-			//var now = new Date();
-			//var utc = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-			//calendar.curDate = utc;
 			calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
 			calendar.curYear = calendar.curDate.getFullYear();
 			calendar.navMonth();
@@ -59,18 +54,25 @@ function CalendarController(ApiService, $mdDialog, $filter)
 			calendar.refreshReservations();
 		})
 		.catch((error) => {
-			calendar.alert = "The selected date is already under reservation. Please refresh the page to continue!";
-			console.log("Promise in add reservation failed. Check if server is running correctly");
+			calendar.alert = "The selected date is already under reservation - refreshing view!";
+			calendar.refreshReservations(); // Refreshing ~ this is for tackling the write-existing race condition. Even if a failure occurrs due to a booking,	
+											// in another window, the reservations list will be refreshed so as to sync with the current backend state. 
+			console.log("Promise in add Reservation failed. Check if server is running correctly");
 		});
 	}
 
 	calendar.removeReservation = (index) => {
+		console.log(index);
+		console.log(calendar.reservations[index]["tennantName"]);
+		console.log(calendar.reservations[index]["time"]);
 		var resPromise = ApiService.removeReservation(calendar.reservations[index]["tennantName"], calendar.reservations[index]["time"]);
 		resPromise.then( (response) => { 
 			calendar.refreshReservations();
 		})
 		.catch((error) => {
-			calendar.alert = "The selected tenant seems to have already been removed. Please refresh the page to continue!";
+			calendar.alert = "The selected tenant seems to have already been removed - refreshing view!";
+			calendar.refreshReservations(); // Refreshing ~ this is for tackling the remove-nonexisting race condition. Even if a failure occurrs due to a booking,	
+											// in another window, the reservations list will be refreshed so as to sync with the current backend state. 
 			console.log("Promise in remove reservation failed. Check if server is running correctly");
 		});
 	}
@@ -91,7 +93,11 @@ function CalendarController(ApiService, $mdDialog, $filter)
 	}
 
   	calendar.showAddConfirm = (event) => {
-	    // Appending dialog to document.body to cover sidenav in docs app
+	    // First check if the tennant name field contains a string name
+	    if (calendar.tenantName == "") {
+	    	calendar.alert = 'Please enter a tenant name first.'
+	    	return;
+	    }
 	    var confirm = $mdDialog.confirm()
 	      .title('Are you sure you want to add a tenant?')
 	      .content('You can always reverse this by removing the tenant.')
@@ -122,7 +128,7 @@ function CalendarController(ApiService, $mdDialog, $filter)
 	    }, function() {
 	      calendar.alert = 'The tenant has not been removed.';
 	    }); 
-  }
+	}
 
 
   	calendar.dayClicked = (key) => {

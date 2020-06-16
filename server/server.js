@@ -64,11 +64,8 @@ app.post('/reserve', function(request, response) {
         var reserved = body.reserved;
         var name = body.tennantName;
 
-        date = moment
-            .unix(date)
-            .tz(locale)
-            .startOf('day')
-            .unix();
+        date = body.time; 		// The date is now picked directly from the request body 
+								// since initializing it to day start is redundant and not coherent with frontend logic
         friendlyTime = moment
             .unix(date)
             .tz(locale)
@@ -87,7 +84,7 @@ app.post('/reserve', function(request, response) {
             return moment.unix(date).isSame(moment.unix(nightTime), 'day');
         }).length;
 
-        console.log(isReserved);
+        console.log('Reserved',isReserved);
 
         if (reserved && isReserved) {
             response.status(400);
@@ -105,14 +102,14 @@ app.post('/reserve', function(request, response) {
             data.push(tennantData);
         } else {
             _.remove(data, currentObject => {
-                // Check if passed timestamp is of same day, since reservations are for complete day
-                return moment
-                    .unix(tennantData.time)
-                    .isSame(moment.unix(currentObject.time), 'day');
+                // Check if passed timestamp matches, purge only the ones with an exact match
+				// This change has been explained in the README.md file's notes.
+				console.log(tennantData.time, currentObject.time, tennantData.time == currentObject.time);
+                return (tennantData.time == currentObject.time);
             });
         }
 
-        console.log(data);
+        console.log('Data', data);
 
         send(response, {
             success: true

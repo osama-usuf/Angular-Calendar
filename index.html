@@ -36,10 +36,8 @@
 			        <md-list-item class="md-3-line" ng-repeat="res in cal.reservations" ng-click="cal.showRemoveConfirm($event, $index)" layout layout-wrap>
 			          <div class="md-list-item-text" layout="column">
 			            <h3>{{ res['tennantName'] }}</h3>
-			            <p>Date of Stay: {{ res['time'] }} {{res['time2']}} </p>
-			        <!-- | date:'dd-MM-yyyy' }} </p> -->
-			        	<!-- <md-button layout-padding layout class="md-fab md-mini md-primary" ng-click="cal.removeReservation($index)"> X </md-button> -->
-			          </div>
+			            <p>Date of Stay: {{ res["friendlyTime"] }}</p>
+					  </div>
 			        </md-list-item>
 			      </md-list>
 				</md-content>
@@ -57,7 +55,7 @@
 		<div class="md-actions" layout="column" layout-align="center center" layout-margin>
 		<section layout="column" layout-align="center center"> <b> Tennant Name </b>
 		  <input layout-margin ng-model="cal.tenantName">  {{cal.tenantName}}
-		  <b layout> Selected Date </b> {{cal.curDate | date:'dd-MM-yyyy hh:mm:ss Z'}}
+		  <b layout> Selected Date </b> {{cal.curDate | date:'dd-MM-yyyy'}}
 		</section>
 		<section layout="row" layout-sm="column" layout-align="center center">
 		  <md-button class="md-raised md-primary" ng-click="cal.showAddConfirm($event)">Add Tenant</md-button>
