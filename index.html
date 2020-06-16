@@ -2,7 +2,6 @@
 <html ng-app='NGCalendarApp'>
 <head>
 	<meta charset="utf-8">
-
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
@@ -14,59 +13,59 @@
     <script src="js/services.js"></script>
 	<script src="js/app.js"></script>
 	<title>Angular Calendar</title>
-
 </head>
 <body>
-
 	<div ng-controller='CalendarController as cal'>
-	
 		<h1 layout="column" layout-align="center center" class="md-display">A Simple Calendar Reservation System</h1>
-
  		<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
 			<b layout="row" layout-margin layout-align="center center"> 
 				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
 				<div class="month">{{cal.curMonth | limitTo : 3 : 0}}</div>
 				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
 			</b>
- 			<b > {{cal.curYear}} </b>
+ 			<b> {{cal.curYear}} </b>
 	 	</md-whiteframe>
-
 		<div layout flex="none" layout-padding class="calendar">
    			<div layout="column" flex="none" layout-align="left top" ng-repeat="week in cal.viewDays">
 				<md-button class='day md-raised md-{{day["isDay"]}} md-{{day["selected"]}}'  ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week" ng-click="cal.dayClicked(day)">{{day['value']}}</md-button>
 			</div>
 			<div layout="column" flex="none" layout-margin layout-padding layout-align="right down"> 
-					<h1  class="md-display-1" >Reservations for the Month</h1>
-
+				<h1  class="md-display-1" >Reservations for the Month</h1>
 			    <md-content>
 			      <md-list>
 			        <md-list-item class="md-3-line" ng-repeat="res in cal.reservations" ng-click="null" layout layout-wrap>
 			          <div class="md-list-item-text"  layout-wrap>
-			            <h3>{{ res['tennantName'] }}  </h3>
-			            <p>Date of Stay: {{ res['time'] * 1000 | date:'yyyy-MM-dd'  }} </p>
+			            <h3>{{ res['tennantName'] }}</h3>
+			            <p>Date of Stay: {{ res['time'] * 1000 | date:'dd-MM-yyyy'  }} </p>
 			          </div>
 			        </md-list-item>
 			      </md-list>
 				</md-content>
-
+			    <md-content ng-if="cal.reservations.length == 0">
+			      <md-list>
+			        <md-list-item class="md-3-line" layout layout-wrap>
+			          <div class="md-list-item-text"  layout-wrap layout-align="top left">
+							No Reservations Found - Add Now!
+			          </div>
+			        </md-list-item>
+			      </md-list>
+				</md-content>
 			</div>
 		</div>
-      <div class="md-actions" layout="row" layout-align="center center" layout-margin>
-	    <section layout="row" layout-sm="column" layout-align="center center">
-	      <md-button class="md-raised md-primary" ng-click="cal.showConfirm($event)">Add Tenant</md-button>
-	      <md-button ng-disabled="{{!cal.canRemove}}" class="md-raised md-primary">Remove Tenant</md-button>
-	    </section>
-	    {{cal.curDate | date:'yyyy-MM-dd'}}
-      </div>
+		<div class="md-actions" layout="column" layout-align="center center" layout-margin>
+		<section layout="column" layout-align="center center"> <b> Tennant Name </b>
+		  <input layout-margin ng-model="cal.tenantName">  {{cal.tenantName}}
+		  <b layout> Selected Date </b> {{cal.curDate | date:'dd-MM-yyyy'}}
+		</section>
+		<section layout="row" layout-sm="column" layout-align="center center">
+		  <md-button class="md-raised md-primary" ng-click="cal.showConfirm($event)">Add Tenant</md-button>
+		  <md-button ng-disabled="{{!cal.canRemove}}" class="md-raised md-primary">Remove Tenant</md-button>
+		</section>
+		</div>
       <br/>
-
-
       	<b layout="row" layout-align="center center" layout-margin>
     		{{cal.alert}}
 		</b>
 	</div>
-
-
-
 </body>
 </html>

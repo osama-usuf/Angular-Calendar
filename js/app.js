@@ -22,7 +22,19 @@ function CalendarController(ApiService, $mdDialog)
 			calendar.reservations = response.data["reserved"];
 		})
 		.catch((error) => {
+			calendar.alert = "Couldn't fetch data from the server correctly."
 			console.log("Promise in CalendarController failed. Check if server is running correctly");
+		});
+	}
+
+	calendar.changeReservation = (write) => {
+		var resPromise = ApiService.changeReservation(calendar.tenantName, dateToUNIXTime(calendar.curDate), write);
+		resPromise.then( (response) => {
+			calendar.refreshReservations();
+		})
+		.catch((error) => {
+			calendar.alert = "The selected date is already under reservation";
+			console.log("Promise in Change Reservation failed. Check if server is running correctly");
 		});
 	}
 
@@ -53,6 +65,7 @@ function CalendarController(ApiService, $mdDialog)
 	      .cancel('Go back')
 	      .targetEvent(event);
 	    $mdDialog.show(confirm).then(function() {
+	    	calendar.changeReservation(1);
 	      calendar.alert = 'The tenant has been added.';
 	    }, function() {
 	      calendar.alert = 'The tenant has not been added.';
@@ -70,6 +83,7 @@ function CalendarController(ApiService, $mdDialog)
 	calendar.curDate = new Date();
 	calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
 	calendar.curYear = calendar.curDate.getFullYear();
+	calendar.tenantName = "";
 
 	calendar.refreshReservations();
 	calendar.canRemove = false; // disables the remove tenant button

@@ -8,4 +8,16 @@ function ApiService($http, ApiBasePath) {
 		});
 		return response;
 	};
+	this.changeReservation = (tenantName, time, write) => {
+		// Fetches Existing Reservations for the current month
+		var response = $http({
+			method: "POST",
+			url: (ApiBasePath + "/reserve/"), // change
+			data: { "tennantName": tenantName, 
+					"time": time,
+					"reserved": write
+				}
+		});
+		return response;
+	};
 }
