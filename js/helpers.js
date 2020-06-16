@@ -30,10 +30,19 @@ function getNavMonthYear(key, month, year)
 	return [navMonth, navYear]
 }
 
-function dateToUNIXTime(date)
+function dateToUNIXTime(date, key)
 {
+	//console.log('Input:', date);
+	
+	var addDate = new Date(date);
+	if (key == 0) {
+		addDate.setDate(addDate.getDate()+1); // a record is being added, set the UTC offset
+	}
+
+	//var utc = new Date(date * 1000 + now.getTimezoneOffset() * 60000);
+			//calendar.curDate = utc;
 	// Source: https://stackoverflow.com/questions/11893083/convert-normal-date-to-unix-timestamp
-	return (new Date(date).getTime() / 1000).toFixed(0);
+	return (new Date(addDate).getTime() / 1000).toFixed(0);
 }
 
 function listToMatrix(daysArr) 
