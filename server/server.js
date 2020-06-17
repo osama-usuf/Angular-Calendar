@@ -64,9 +64,8 @@ app.post('/reserve', function(request, response) {
         var reserved = body.reserved;
         var name = body.tennantName;
 
-        date = body.time; 		// The date is now picked directly from the request body 
-								// since initializing it to day start is redundant and not coherent with frontend logic
-        friendlyTime = moment
+
+		friendlyTime = moment
             .unix(date)
             .tz(locale)
             .startOf('day')
@@ -102,7 +101,6 @@ app.post('/reserve', function(request, response) {
             _.remove(data, currentObject => {
                 // Check if passed timestamp matches, purge only the ones with an exact match
 				// This change has been explained in the README.md file's notes.
-				
                 return (tennantData.time == currentObject.time);
             });
         }
@@ -123,28 +121,6 @@ app.get('/now', function(request, response) {
         //     .tz(locale)
         //     .format('YYYY-MM-DD HH:mm'),
         timeZone: locale
-    });
-});
-
-// End-point to get first day and last day timestamps based on input month
-// * start and end are integers (seconds since Unix epoch)
-app.get('/then/:month/:year', function(request, response) {
-    var month = parseInt(request.params.month);
-	var year = parseInt(request.params.year);
-	var offset = 20000;
-    if (isNaN(month) || isNaN(year) || month < 0 || month > 11 || year < 0) {
-        response.status(400);
-        response.send('Bad Request');
-        return;
-    }
-
-	var tempDate = moment().year(year).month(month).day(1).format('YYYY-MM-DD');
-
-	var startTime = moment(tempDate).startOf('month').unix();
-	var endTime = moment(tempDate).endOf('month').unix();
-    send(response, {
-        start: startTime,
-		end: endTime
     });
 });
 

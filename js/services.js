@@ -8,35 +8,28 @@ function ApiService($http, ApiBasePath) {
 		});
 		return response;
 	};
-	this.getMonthTime = (month, year) => {
-		var response = $http({
-			method: "GET",
-			url: (ApiBasePath + "/then/"+ month + "/" + year)
-		});
-		return response;
-	};
-	this.addReservation = (tenantName, time) => {
+	this.changeReservation = (tenantName, time, write) => {
 		// Fetches Existing Reservations for the current month
 		var response = $http({
 			method: "POST",
 			url: (ApiBasePath + "/reserve/"),
 			data: { "tennantName": tenantName, 
 					"time": time,
-					"reserved": true
+					"reserved": write
 				}
 		});
 		return response;
 	};
-	this.removeReservation = (tenantName, time) => {
-		// Fetches Existing Reservations for the current month
-		var response = $http({
-			method: "POST",
-			url: (ApiBasePath + "/reserve/"),
-			data: { "tennantName": tenantName, 
-					"time": time,
-					"reserved": false
-				}
-		});
-		return response;
-	};
+	// this.removeReservation = (tenantName, time) => {
+	// 	// Fetches Existing Reservations for the current month
+	// 	var response = $http({
+	// 		method: "POST",
+	// 		url: (ApiBasePath + "/reserve/"),
+	// 		data: { "tennantName": tenantName, 
+	// 				"time": time,
+	// 				"reserved": false
+	// 			}
+	// 	});
+	// 	return response;
+	// };
 }
