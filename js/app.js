@@ -11,46 +11,45 @@ CalendarController.$inject = ['ApiService','$mdDialog', '$filter'];
 function CalendarController(ApiService, $mdDialog, $filter) 
 {
 	var calendar = this;
-	// Methods
-	calendar.refreshReservations = () => {
-		var [numDays, _] = getTotalDays(calendar.curDate.getMonth(), calendar.curYear);
-		var firstDay = new Date(calendar.curYear, calendar.curDate.getMonth(), 1);
-		var lastDay = new Date(calendar.curYear, calendar.curDate.getMonth(), numDays);
 
-		var resPromise = ApiService.getReservations(dateToUNIXTime(firstDay), dateToUNIXTime(lastDay));
-		resPromise.then( (response) => {
-			var res = response.data["reserved"];
-			for (var i=0; i< res.length; i++) {
-				res[i]["friendlyTime"] = $filter('date')(res[i]["time"] * 1000, 'dd-MM-yyyy', 'UTC');
-			}
-			calendar.reservations = res;
-		})
+	function resPromiseFn(response) {
+		var res = response.data["reserved"];
+		// for (var i=0; i< res.length; i++) {
+		// 	res[i]["friendlyTime"] = $filter('date')(res[i]["time"] * 1000, 'dd-MM-yyyy', 'UTC');
+		// }
+		calendar.reservations = res;
+	}
+
+	function timePromiseFn(response) {
+		var startTime = response.data["start"];
+		var endTime = response.data["end"];
+		console.log(startTime, endTime);
+		var resPromise = ApiService.getReservations(startTime, endTime);
+		resPromise.then(resPromiseFn)
 		.catch((error) => {
 			calendar.alert = "Couldn't fetch data from the server correctly."
-			console.log("Promise in CalendarController failed. Check if server is running correctly");
+			console.log("resPromise in CalendarController failed. Check if server is running correctly");
 		});
 	}
 
-	calendar.getServerTime = () => {
-		var resPromise = ApiService.getServerTime();
-		resPromise.then( (response) => {
-			var date = new Date(response.data["time"] * 1000);
+	// Methods
+	calendar.refreshReservations = () => {
+		// var [numDays, _] = getTotalDays(calendar.curDate);
+		// var firstDay = new Date(calendar.curYear, calendar.curDate.format('M'), 1);
+		// var lastDay = new Date(calendar.curYear, calendar.curDate.format('M'), numDays);
 
-			calendar.curDate = new Date(date);
-
-			calendar.curMonth = calendar.curDate.toLocaleDateString('default', { month: 'long' });
-			calendar.curYear = calendar.curDate.getFullYear();
-			calendar.navMonth();
-		})
-		.catch((error) => {
-			calendar.alert = "The server time couldn't be fetched correctly.";
-			console.log("Promise in Server Time. Check if server is running correctly");
-		});
+		// // First, fetch the start & end timestamps from the server's /then/:month/:year end-point
+		// var timePromise = ApiService.getMonthTime(calendar.curDate.format('M'), calendar.curYear);
+		// timePromise.then(timePromiseFn)
+		// .catch((error) => {
+		// 	calendar.alert = "Couldn't Fetch Time Data From the Server Correctly.";
+		// 	console.log("timePromise in CalendarController failed. Check if server is running correctly");
+		// });
 	}
 
 	calendar.addReservation = () => {
-		var resPromise = ApiService.addReservation(calendar.tenantName, dateToUNIXTime(calendar.curDate, 0));
-		resPromise.then( (response) => { 
+		var promise = ApiService.addReservation(calendar.tenantName, dateToUNIXTime(calendar.curDate, 0));
+		promise.then( (response) => { 
 			calendar.refreshReservations();
 		})
 		.catch((error) => {
@@ -62,11 +61,8 @@ function CalendarController(ApiService, $mdDialog, $filter)
 	}
 
 	calendar.removeReservation = (index) => {
-		console.log(index);
-		console.log(calendar.reservations[index]["tennantName"]);
-		console.log(calendar.reservations[index]["time"]);
-		var resPromise = ApiService.removeReservation(calendar.reservations[index]["tennantName"], calendar.reservations[index]["time"]);
-		resPromise.then( (response) => { 
+		var promise = ApiService.removeReservation(calendar.reservations[index]["tennantName"], calendar.reservations[index]["time"]);
+		promise.then( (response) => { 
 			calendar.refreshReservations();
 		})
 		.catch((error) => {
@@ -79,15 +75,17 @@ function CalendarController(ApiService, $mdDialog, $filter)
 
 	calendar.navMonth = (key) => {
 		// Method for updating the calendar view, is fired when nav buttons are clicked
-		var [month, year] = getNavMonthYear(key, calendar.curDate.getMonth(), calendar.curYear)
-		calendar.curMonth = new Date(year, month, 1).toLocaleDateString('default', { month: 'long' });;
-		calendar.curYear = year;
-		calendar.curDate.setFullYear(year, month);
-		calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear, calendar.curDate);
 
-		var [numDays, _] = getTotalDays(calendar.curDate.getMonth(), calendar.curYear);
-		calendar.firstDay = new Date(calendar.curYear, calendar.curDate.getMonth(), 1);
-		calendar.lastDay = new Date(calendar.curYear, calendar.curDate.getMonth(), numDays);
+		// Tested Correctly & Completely
+		var tempDate = new Date(calendar.curDate.format('YYYY'), calendar.curDate.format('M') - 1, 1);
+		calendar.curDate = new moment(tempDate);
+
+		calendar.curDate = getNavMonthYear(key, calendar.curDate);
+		calendar.viewDays = getViewDays(calendar.curDate);
+
+		// var [numDays, _] = getTotalDays(calendar.curDate);
+		// calendar.firstDay = new Date(calendar.curYear, calendar.curDate.format('M'), 1);
+		// calendar.lastDay = new Date(calendar.curYear, calendar.curDate.format('M'), numDays);
 
 		calendar.refreshReservations();
 	}
@@ -130,17 +128,22 @@ function CalendarController(ApiService, $mdDialog, $filter)
 	    }); 
 	}
 
-
   	calendar.dayClicked = (key) => {
   		if (key['isDay'] != "primary")
   		{
-  			calendar.viewDays = getViewDays(calendar.curDate.getMonth(), calendar.curYear, calendar.curDate, key['value']);
+  			var tempDate = new Date(calendar.curDate.format('YYYY'), calendar.curDate.format('M') - 1, key['value']);
+  			calendar.curDate = new moment(tempDate);
+  			calendar.viewDays = getViewDays(calendar.curDate, key['value']);
   		}
 	}
 
+	var locale = 'Asia/Dubai';
+	calendar.curDate = new moment();
+	console.log(moment.unix(calendar.curDate).tz(locale).startOf('day').format('YYY-MM-DD HH:mm'));
+	calendar.curMonth = calendar.curDate.format('MMMM');
+	calendar.curYear = calendar.curDate.format('YYYY');
 	// Controller Scope variables - used in the view directly for laying out the page
-	calendar.getServerTime();
-
+	calendar.navMonth();
 	calendar.tenantName = "";
 }
 })();

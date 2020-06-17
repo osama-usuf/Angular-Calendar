@@ -8,13 +8,13 @@ function ApiService($http, ApiBasePath) {
 		});
 		return response;
 	};
-	this.getServerTime = () => {
+	this.getMonthTime = (month, year) => {
 		var response = $http({
 			method: "GET",
-			url: (ApiBasePath + "/now/")
+			url: (ApiBasePath + "/then/"+ month + "/" + year)
 		});
 		return response;
-	}
+	};
 	this.addReservation = (tenantName, time) => {
 		// Fetches Existing Reservations for the current month
 		var response = $http({

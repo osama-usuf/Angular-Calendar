@@ -54,7 +54,7 @@ app.get('/reserve/:start/:end', function(request, response) {
 // End-point to change
 app.post('/reserve', function(request, response) {
     var body = request.body;
-    var date = body.time;
+    var date = parseInt(body.time);
 
     if (isNaN(date)) {
         response.status(400);
@@ -84,8 +84,6 @@ app.post('/reserve', function(request, response) {
             return moment.unix(date).isSame(moment.unix(nightTime), 'day');
         }).length;
 
-        console.log('Reserved',isReserved);
-
         if (reserved && isReserved) {
             response.status(400);
             response.send('Slot already reserved');
@@ -104,13 +102,11 @@ app.post('/reserve', function(request, response) {
             _.remove(data, currentObject => {
                 // Check if passed timestamp matches, purge only the ones with an exact match
 				// This change has been explained in the README.md file's notes.
-				console.log(tennantData.time, currentObject.time, tennantData.time == currentObject.time);
+				
                 return (tennantData.time == currentObject.time);
             });
         }
-
-        console.log('Data', data);
-
+		console.log(data);
         send(response, {
             success: true
         });
@@ -127,6 +123,28 @@ app.get('/now', function(request, response) {
         //     .tz(locale)
         //     .format('YYYY-MM-DD HH:mm'),
         timeZone: locale
+    });
+});
+
+// End-point to get first day and last day timestamps based on input month
+// * start and end are integers (seconds since Unix epoch)
+app.get('/then/:month/:year', function(request, response) {
+    var month = parseInt(request.params.month);
+	var year = parseInt(request.params.year);
+	var offset = 20000;
+    if (isNaN(month) || isNaN(year) || month < 0 || month > 11 || year < 0) {
+        response.status(400);
+        response.send('Bad Request');
+        return;
+    }
+
+	var tempDate = moment().year(year).month(month).day(1).format('YYYY-MM-DD');
+
+	var startTime = moment(tempDate).startOf('month').unix();
+	var endTime = moment(tempDate).endOf('month').unix();
+    send(response, {
+        start: startTime,
+		end: endTime
     });
 });
 

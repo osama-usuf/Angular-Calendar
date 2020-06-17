@@ -5,42 +5,32 @@ function getDayName(day)
 	return day.slice(0, 3);
 }
 
-function getTotalDays(month, year)
+function getTotalDays(oldDate)
 {
 	// Given month & year, outputs the total number of days
 	// in that particular month and the offset for the first day
 	// (month, year) -> (numDays, firstDay)
-	var firstDay = new Date(year, month, 1).getDay();
-	var numDays = 32 - new Date(year, month, 32).getDate();
+	var date = new moment(oldDate);
+	var firstDay = date.startOf('month').format('d');
+	var numDays = date.daysInMonth();
 	return [numDays, firstDay]
 }
 
-function getNavMonthYear(key, month, year)
+function getNavMonthYear(key, oldDate)
 {
-	if (key != 1 && key != -1) return [month, year]
-
-	var navMonth = month; 
-	var navYear =   year;
-
-	if (key == 1) navMonth = (navMonth + key) % 12;	
-	else navMonth = (((navMonth - 1) % 12) + 12) % 12;
-	
-	if 	( (month ==  0 && key == -1) || (month == 11 && key == 1)) 	{ navYear += key; }
-
-	return [navMonth, navYear]
+	console.log('helper getNavMonthYear, oops');
+	var date = new moment(oldDate);
+	if (key != 1 && key != -1) return date;
+	var date = date.add(key, 'months');
+	return date;
 }
 
-function dateToUNIXTime(date, key)
+function dateToUNIXTime(date, key) // to remove
 {
-	//console.log('Input:', date);
-	
 	var addDate = new Date(date);
 	if (key == 0) {
-		addDate.setDate(addDate.getDate()+1); // a record is being added, set the UTC offset
+		//addDate.setDate(addDate.getDate()+1); // a record is being added, set the UTC offset -- WRONG, will vary based on system time
 	}
-
-	//var utc = new Date(date * 1000 + now.getTimezoneOffset() * 60000);
-			//calendar.curDate = utc;
 	// Source: https://stackoverflow.com/questions/11893083/convert-normal-date-to-unix-timestamp
 	return (new Date(addDate).getTime() / 1000).toFixed(0);
 }
@@ -51,7 +41,7 @@ function listToMatrix(daysArr)
 	var newArr = [];
 	var tempDays = [];
 	for (var i=0; i< 7; i++) {
-		tempDays.push({'value':getDayName(tempDays.length), 'disabled': false, 'isDay': 'primary'});
+		tempDays.push({'value': getDayName(tempDays.length), 'disabled': false, 'isDay': 'primary'});
 	}
 	newArr.push(tempDays);
 	while(daysArr.length) {
@@ -60,15 +50,17 @@ function listToMatrix(daysArr)
 	return newArr;
 }
 
-function getViewDays(month, year, date, value = 1)
+function getViewDays(date, value = 1)
 {
-	date.setDate(value);
+	//var date = new moment(oldDate); // changing oldDate to date and commenting this line fixes the issue for now
 	var accent = "no-accent";
-	var [nextMonth, nextYear] = getNavMonthYear(1, month, year);
-	var [prevMonth, prevYear] = getNavMonthYear(-1, month, year);
-	var [totalDays_curView, firstDay_curView]  = getTotalDays(month, year); 
-	var [totalDays_prevView, firstDay_prevView] = getTotalDays(prevMonth, prevYear);
-	var [totalDays_nextView, firstDay_nextView] = getTotalDays(nextMonth, nextYear);
+
+	var nextMonth = getNavMonthYear(1, date);
+	var prevMonth = getNavMonthYear(-1, date);
+
+	var [totalDays_curView, firstDay_curView]  = getTotalDays(date); 
+	var [totalDays_prevView, firstDay_prevView] = getTotalDays(prevMonth);
+	var [totalDays_nextView, firstDay_nextView] = getTotalDays(nextMonth);
 
 	// Figure out initial padding required
 	var initPadding = firstDay_curView;

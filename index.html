@@ -6,6 +6,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-2012-2022.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <link rel="stylesheet" href="styles/styles.css">
@@ -20,7 +23,7 @@
  		<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
 			<b layout="row" layout-margin layout-align="center center"> 
 				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
-				<div class="month">{{cal.curMonth | limitTo : 3 : 0}}</div>
+				<div class="month">{{cal.curDate.format('MMM')}}</div>
 				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
 			</b>
  			<b> {{cal.curYear}} </b>
@@ -36,7 +39,7 @@
 			        <md-list-item class="md-3-line" ng-repeat="res in cal.reservations" ng-click="cal.showRemoveConfirm($event, $index)" layout layout-wrap>
 			          <div class="md-list-item-text" layout="column">
 			            <h3>{{ res['tennantName'] }}</h3>
-			            <p>Date of Stay: {{ res["friendlyTime"] }}</p>
+			            <p>Date of Stay: {{ res["friendlyTime"] }} {{ res["time"] }}</p>
 					  </div>
 			        </md-list-item>
 			      </md-list>
@@ -55,7 +58,7 @@
 		<div class="md-actions" layout="column" layout-align="center center" layout-margin>
 		<section layout="column" layout-align="center center"> <b> Tennant Name </b>
 		  <input layout-margin ng-model="cal.tenantName">  {{cal.tenantName}}
-		  <b layout> Selected Date </b> {{cal.curDate | date:'dd-MM-yyyy'}}
+		  <b layout> Selected Date </b> {{cal.curDate.format()}}
 		</section>
 		<section layout="row" layout-sm="column" layout-align="center center">
 		  <md-button class="md-raised md-primary" ng-click="cal.showAddConfirm($event)">Add Tenant</md-button>
