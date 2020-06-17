@@ -3,7 +3,7 @@
 	width: 60px;
 	height: 60px;
 	text-align: center;
-	min-width: unset!important;
+	min-width: unset !important;
 }
 
 .md-whiteframe-z1 {
@@ -13,8 +13,8 @@
 
 .chevron {
 	/* used for the chevrons in the month navigation pane */
-	width: 25px!important;
-	min-width: unset!important;
+	width: 25px !important;
+	min-width: unset !important;
 
 }
 
@@ -35,6 +35,6 @@
 
 md-list.make-scrollable {
 	/* for making monthly reservation list scrollable upon height overflow */
-    height: 350px;
-    overflow-y: scroll;
+	height: 350px;
+	overflow-y: scroll;
 }
