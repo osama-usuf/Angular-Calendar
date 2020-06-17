@@ -1,73 +1,86 @@
 <!DOCTYPE html>
-<html ng-app='NGCalendarApp'>
-<head>
-	<meta charset="utf-8">
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-2012-2022.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
-    <link rel="stylesheet" href="styles/styles.css">
-    <script src="js/helpers.js"></script>
-    <script src="js/services.js"></script>
-	<script src="js/app.js"></script>
-	<title>Angular Calendar</title>
-</head>
-<body>
-	<div ng-controller='CalendarController as cal'>
-		<h1 layout="column" layout-align="center center" class="md-display">A Simple Calendar Reservation System</h1>
- 		<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
-			<b layout="row" layout-margin layout-align="center center"> 
-				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
-				<div class="month">{{cal.curDate.format('MMM')}}</div>
-				<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(1)"> 🡆 </md-button> 
-			</b>
- 			<b> {{cal.curYear}} </b>
-	 	</md-whiteframe>
-		<div layout flex="none" layout-padding class="calendar">
-   			<div layout="column" flex="none" layout-align="left top" ng-repeat="week in cal.viewDays">
-				<md-button class='day md-raised md-{{day["isDay"]}} md-{{day["selected"]}}'  ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week" ng-click="cal.dayClicked(day)">{{day['value']}}</md-button>
-			</div>
-			<div layout="column" flex="none" layout-margin layout-padding layout-align="right down"> 
-				<h1  class="md-display-1" >Reservations for the Month</h1>
-			    <md-content>
-			      <md-list>
-			        <md-list-item class="md-3-line" ng-repeat="res in cal.reservations" ng-click="cal.showRemoveConfirm($event, $index)" layout layout-wrap>
-			          <div class="md-list-item-text" layout="column">
-			            <h3>{{ res['tennantName'] }}</h3>
-			            <p>Date of Stay: {{ res["friendlyTime"] }}</p>
-					  </div>
-			        </md-list-item>
-			      </md-list>
-				</md-content>
-			    <md-content ng-if="cal.reservations.length == 0">
-			      <md-list>
-			        <md-list-item class="md-3-line" layout layout-wrap>
-			          <div class="md-list-item-text"  layout-wrap layout-align="top left">
-							No Reservations Found - Add Now!
-			          </div>
-			        </md-list-item>
-			      </md-list>
-				</md-content>
+<html ng-app="NGCalendarApp">
+	<head>
+		<meta charset="utf-8">
+		<!-- Third-Party Scripts: Angular, Angular Material, Moment JS -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-aria.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data-2012-2022.min.js"></script>
+		<!-- Application Scripts (from js/ directory) -->
+		<script src="js/helpers.js"></script>
+		<script src="js/services.js"></script>
+		<script src="js/app.js"></script>
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.css">
+		<link rel="stylesheet" href="styles/styles.css">
+		<title>Angular Calendar</title>
+	</head>
+	<body ng-controller="CalendarController as cal">
+		<div class="body-wrapper">
+			<h1 layout="column" layout-align="center center" class="md-display">A Simple Calendar Reservation System</h1>
+			<!-- Month & Year Pane -->
+			<md-whiteframe class="md-whiteframe-z1" layout="column" layout-margin layout-align="center center">
+				<b layout="row" layout-margin layout-align="center center">
+					<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(-1)"> 🡄 </md-button>
+					<div class="month">{{cal.curDate.format("MMM")}}</div>
+					<md-button class="md-primary md-raised chevron" ng-click="cal.navMonth(1)"> 🡆 </md-button>
+				</b>
+				<b> {{cal.curDate.format("YYYY")}} </b>
+			</md-whiteframe>
+			<!-- Main Body - Layed out via Angular Material"s Flexbox System -->
+			<div layout layout-sm="column" layout-xs="column">
+				<!-- Main Calendar Pane -->
+				<div layout layout-margin layout-align="center center" flex="66" flex-sm="66" flex-xs="66" class="debug-box"> 
+					<div layout="column" ng-repeat="week in cal.viewDays">
+						<md-button class="day md-raised md-{{day['isDay']}} md-{{day['selected']}}"  ng-disabled="{{day['disabled']}}" layout="column"  ng-repeat="day in week" ng-click="cal.dayClicked(day)">{{day["value"]}}</md-button>
+					</div>
+				</div>
+				<!-- Monthly Remove Reservation Pane -->
+				<div layout="column" layout-sm="column" layout-margin layout-padding layout-align="right center" flex="33" flex-sm="66" flex-xs="66" class="debug-box">
+					<h2>Remove Reservations</h2>
+					<div layout="row" layout-wrap layout-sm="column" layout-xs="column" layout-align="space-around" ng-if="!cal.resLoaded">
+						<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+					</div>
+					<div>
+						<md-content ng-if="cal.reservations.length > 0">
+							<md-list class="make-scrollable">
+								<md-list-item layout layout-wrap class="md-3-line" ng-repeat="res in cal.reservations" ng-click="cal.showRemoveConfirm($event, $index)">
+									<div layout="column" class="md-list-item-text" >
+										<h3>{{ res["tennantName"] }}</h3>
+										<p>Date of Stay: {{ res["friendlyTime"] }}</p>
+									</div>
+								</md-list-item>
+							</md-list>
+						</md-content>
+						<md-content ng-if="cal.reservations.length == 0 && cal.resLoaded">
+							<md-list>
+								<md-list-item layout layout-wrap class="md-3-line">
+									<div layout-align="top top" class="md-list-item-text" >
+										No Reservations Found - Add Now!
+									</div>
+								</md-list-item>
+							</md-list>
+						</md-content>
+						<div>
+						</div>
+					</div>
+				</div>
+				<!-- Add Reservations Pane -->
+				<div layout="column" layout-sm="column" layout-xs="column" layout-margin layout-padding layout-align="right center" flex="33" flex-sm="66"  flex-xs="66" class="debug-box">
+					<h2>Add Reservations</h2>
+					<section layout="column" layout-sm="column" layout-align="center center"> <b> Tenant Name </b>
+						<input layout-margin ng-model="cal.tenantName"> 
+						<b layout> Selected Date </b> {{cal.curDate.format("MMMM DD, YYYY")}}
+					</section>
+					<section layout="column" layout-sm="row" layout-align="center center">
+						<md-button class="md-raised md-primary" ng-click="cal.showAddConfirm($event)">Add Tenant</md-button>
+					</section>
+				</div>
 			</div>
 		</div>
-		<div class="md-actions" layout="column" layout-align="center center" layout-margin>
-		<section layout="column" layout-align="center center"> <b> Tennant Name </b>
-		  <input layout-margin ng-model="cal.tenantName"> 
-		  <b layout> Selected Date </b> {{cal.curDate.format('MMMM DD, YYYY')}}
-		</section>
-		<section layout="row" layout-sm="column" layout-align="center center">
-		  <md-button class="md-raised md-primary" ng-click="cal.showAddConfirm($event)">Add Tenant</md-button>
-		</section>
-		</div>
-      <br/>
-      	<b layout="row" layout-align="center center" layout-margin>
-    		{{cal.alert}}
-		</b>
-	</div>
-</body>
+	</body>
 </html>

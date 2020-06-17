@@ -18,21 +18,10 @@ function getTotalDays(oldDate)
 
 function getNavMonthYear(key, oldDate)
 {
-	console.log('helper getNavMonthYear, oops');
 	var date = new moment(oldDate);
 	if (key != 1 && key != -1) return date;
 	var date = date.add(key, 'months');
 	return date;
-}
-
-function dateToUNIXTime(date, key) // to remove
-{
-	var addDate = new Date(date);
-	if (key == 0) {
-		//addDate.setDate(addDate.getDate()+1); // a record is being added, set the UTC offset -- WRONG, will vary based on system time
-	}
-	// Source: https://stackoverflow.com/questions/11893083/convert-normal-date-to-unix-timestamp
-	return (new Date(addDate).getTime() / 1000).toFixed(0);
 }
 
 function listToMatrix(daysArr) 
@@ -78,7 +67,8 @@ function getViewDays(date, value = 1)
 	}
 	// Populate final array padding
 	var i = 1;
-	while (daysArr.length % 7 != 0) {
+	while (daysArr.length % 7 != 0 || daysArr.length < 7*6) {
+		console.log(daysArr.length)
 		daysArr.push({'value':i++, 'disabled': true, 'reserved': false});
 	}
 	return listToMatrix(daysArr);

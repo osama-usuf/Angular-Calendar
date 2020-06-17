@@ -1,36 +1,40 @@
-button,
-select,
-html,
-textarea,
-input {
-  font-family: Roboto, "Helvetica Neue", sans-serif; }
-
 .day {
+	/* used on the individual day buttons in the calendar pane */
 	width: 60px;
 	height: 60px;
 	text-align: center;
 	min-width: unset!important;
-
-}
-
-.error {
-  color: red;
-}
-
-.calendar {
-	/*outline: 2px solid green;*/
 }
 
 .md-whiteframe-z1 {
+	/* used for theming the bg color of the navigation pane */
 	background-color: white;
 }
 
 .chevron {
+	/* used for the chevrons in the month navigation pane */
 	width: 25px!important;
 	min-width: unset!important;
 
 }
 
 .month {
-	width: 30px;
+	/* used on the month display (in between chevrons) */
+	width: 28px;
+}
+
+.debug-box {
+	/* for debugging purposes, uncomment below outline to see component bboxes */
+	/*outline: 2px solid green;*/
+}
+
+.body-wrapper {
+	/* main html body wrapper, added to restrict minimum screen/layout width*/
+	min-width: 650px;
+}
+
+md-list.make-scrollable {
+	/* for making monthly reservation list scrollable upon height overflow */
+    height: 350px;
+    overflow-y: scroll;
 }

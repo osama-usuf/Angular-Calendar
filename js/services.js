@@ -20,16 +20,4 @@ function ApiService($http, ApiBasePath) {
 		});
 		return response;
 	};
-	// this.removeReservation = (tenantName, time) => {
-	// 	// Fetches Existing Reservations for the current month
-	// 	var response = $http({
-	// 		method: "POST",
-	// 		url: (ApiBasePath + "/reserve/"),
-	// 		data: { "tennantName": tenantName, 
-	// 				"time": time,
-	// 				"reserved": false
-	// 			}
-	// 	});
-	// 	return response;
-	// };
 }
