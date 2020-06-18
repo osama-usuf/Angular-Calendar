@@ -91,8 +91,8 @@ The following edge cases have been robustly tested and error handling has approp
 ## **Tweaks in Server Files
 
 - In the `app.post('/reserve')` method, the logic of removing a tenant from the list of reservations has been tweaked.
-- Previously, if a day had multiple reservations [i], the method would get rid of all reservations from that particular day.
-i.  While the frontend design doesn't allow a day to have multiple reservations, the backend might contain such instances - as highlighted in the second point of the `Restrictions` section earlier in the `README`.
-ii. This change ensures that removing one of the entries on a day with multiple reservations only removes the intended reservation to be removed.
+- Previously, if a day had multiple reservations [1], the method would get rid of all reservations from that particular day.
+1.  While the frontend design doesn't allow a day to have multiple reservations, the backend might contain such instances - as highlighted in the second point of the `Restrictions` section earlier in the `README`.
+1. This change ensures that removing one of the entries on a day with multiple reservations only removes the intended reservation to be removed.
 - Now, it will only remove a single instance with which both the inputs, `tenant name` as well as `time` match exactly.
 - This change can be seen in Lines [101-104] of the `server.js` file.
