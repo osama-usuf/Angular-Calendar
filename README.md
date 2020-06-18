@@ -3,10 +3,12 @@
 - Technical Assignment - a part of Stellic's hiring Process.
 - To Code a Calendar Reservation System without external libraries.
 
-# Dependencies
+![Main View](./images/main.png)
+
+## Dependencies
 
 Dependency | Purpose
-- | -
+-- | --
 [AngularJS 1.4.0](https://code.angularjs.org/1.4.0/) | Core frontend framework
 [AngularJS Material](https://material.angularjs.org/latest/) | Laying out template UI
 [MomentJS](https://momentjs.com/) | Simpler daytime calculations
@@ -20,7 +22,7 @@ Dependency | Purpose
 ## File Structure
 
 File Type | Directory
-- | -
+-- | --
 Server | `/Server/` (`server.js` has been tweaked**)
 JavaScript | `/js/` 
 Style | `/styles/` 
@@ -36,6 +38,8 @@ Image | `/images/` (Contains Images for this Repo)
 - Use the month chevrons in the navigation bar.
 - The same can be used for toggling to next or previous years (for example, pressing next on December at any given year takes you to the January of the next year).
 
+![Navigation Pane](./images/navigation.png)
+
 ##### Add Tenants
 
 - Navigate to the required month.
@@ -44,12 +48,16 @@ Image | `/images/` (Contains Images for this Repo)
 - Click on the `Proceed` button on the confirmation dialog box once prompted.
 - If no errors were encountered, the new tenant will be displayed in the tenant list in the `Remove Tenants` pane.
 
+![Add Tenants](./images/add.png)
+
 ##### Remove Tenants
 
 - Navigate to the required month.
 - Click on the tenant that is to be removed from the `Remove Tenants` pane.
 - Click on the `Remove` button on the confirmation dialog box once prompted.
 - If no errors were encountered, the selected tenant will have been removed and won't be displayed in the tenant list in the `Remove Tenants` pane.
+
+![Remove Tenants](./images/remove.png)
 
 ## Edge Cases
 
@@ -67,7 +75,6 @@ The following edge cases have been robustly tested and error handling has approp
 - *Guide*: AngularJS Official [Material Demos](https://material.angularjs.org/1.1.22/demo) 
 - Random Stack Overflow questions
 
-# 
 
 ## Restrictions/Assumptions
 
@@ -77,12 +84,12 @@ The following edge cases have been robustly tested and error handling has approp
 - Chrome's console gives a passive event listener warning. It's a [known](https://github.com/angular/angular.js/issues/15901) compatibility issue of modern browsers with old versions of AngularJS.
 - Reservations can be made in past dates as well.
 
-# *Tested On
+## *Tested On
 - Chrome
 - Firefox
 - Microsoft Edge.
 
-# **Tweaks in Server Files
+## **Tweaks in Server Files
 
 - In the `app.post('/reserve')` method, the logic of removing a tenant from the list of reservations has been tweaked.
 - Previously, if a day had multiple reservations [i], the method would get rid of all reservations from that particular day.
