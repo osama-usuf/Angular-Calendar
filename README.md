@@ -87,7 +87,6 @@ The following edge cases have been robustly tested and error handling has approp
 ## *Tested On
 - Chrome
 - Firefox
-- Microsoft Edge.
 
 ## **Tweaks in Server Files
 
